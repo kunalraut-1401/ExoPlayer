@@ -1,12 +1,39 @@
 [
   {
-    "name": "YouTube DASH",
+    "name": "Abema",
     "samples": [
       {
-        "name": "Google Glass (MP4,H264)",
-        "uri": "http://www.youtube.com/api/manifest/dash/id/bf5bb2419360daf1/source/youtube?as=fmp4_audio_clear,fmp4_sd_hd_clear&sparams=ip,ipbits,expire,source,id,as&ip=0.0.0.0&ipbits=0&expire=19000000000&signature=51AF5F39AB0CEC3E5497CD9C900EBFEAECCCB5C7.8506521BFC350652163895D4C26DEE124209AA9E&key=ik0",
+        "name": "emsg sample",
+        "uri": "http://se-mashup.fokus.fraunhofer.de:8080/dash/assets/adinsertion-samples/events/inband/dash.mpd",
         "extension": "mpd"
       },
+      {
+        "name": "emsg abe",
+        "uri": "http://dev-drm-mock.abema.io/dash/emsg_sample2/mpd/sample.mpd",
+        "extension": "mpd"
+      },
+      {
+        "name": "dash",
+        "uri": "https://dev-media.abema.io/channel/abema-news/manifest.mpd?enc=wv&t=FAZmiS2WVKybfX4ExfCkG14qqXmV2o7Bgmo5epkwTDrxgyRJZDgNauHTrrDDXGPZBxVW9MFaTHmJdNe6UGjPmfS8QjxY4KCgPWaSVeHtcMKhiBY2ZrK3UKPjsLCQSW2tt1rHVp6Nu82t3PTQbdZKFu39KAKB5FhGkvFV15vwoGMgP6fF1TSBsVs4u9Tabgs2WqJs2&dt=android",
+        "extension": "mpd",
+        "drm_scheme": "cenc",
+        "drm_license_url": "dummy"
+      },
+      {
+        "name": "linear",
+        "uri": "https://dev-media-dash.abema.io/channel/mockdrm-furiya-01/manifest.mpd?t=swyp9thiD6yOov4l&dt=android&enc=wv",
+        "extension": "mpd"
+      },
+      {
+        "name": "ondemand",
+        "uri": "https://dev-media-dash.abema.io/slot/mockdrm-vod-furiya-01-1483196400/manifest.mpd?t=swyp9thiD6yOov4l&dt=android&enc=wv",
+        "extension": "mpd"
+      }
+    ]
+  },
+  {
+    "name": "YouTube DASH",
+    "samples": [
       {
         "name": "Google Play (MP4,H264)",
         "uri": "http://www.youtube.com/api/manifest/dash/id/3aa39fa2cc27967f/source/youtube?as=fmp4_audio_clear,fmp4_sd_hd_clear&sparams=ip,ipbits,expire,source,id,as&ip=0.0.0.0&ipbits=0&expire=19000000000&signature=A2716F75795F5D2AF0E88962FFCD10DB79384F29.84308FF04844498CE6FBCE4731507882B8307798&key=ik0",

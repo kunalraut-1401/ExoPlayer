@@ -79,6 +79,14 @@ public class DefaultDrmSessionManager<T extends ExoMediaCrypto> implements DrmSe
 
   }
 
+  @Override public DrmSession<T> openSession(Looper playbackLooper, DrmInitData drmInitData) {
+    return null;
+  }
+
+  @Override public void closeSession() {
+
+  }
+
   /**
    * The key to use when passing CustomData to a PlayReady instance in an optional parameter map.
    */

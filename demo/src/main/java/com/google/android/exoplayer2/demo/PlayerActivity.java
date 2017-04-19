@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.drm.DefaultDrmSession;
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -67,6 +69,7 @@ import com.google.android.exoplayer2.ui.PlaybackControlView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import java.net.CookieHandler;
@@ -95,6 +98,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
   private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
   private static final CookieManager DEFAULT_COOKIE_MANAGER;
+
   static {
     DEFAULT_COOKIE_MANAGER = new CookieManager();
     DEFAULT_COOKIE_MANAGER.setCookiePolicy(CookiePolicy.ACCEPT_ORIGINAL_SERVER);
@@ -109,6 +113,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
 
   private DataSource.Factory mediaDataSourceFactory;
   private SimpleExoPlayer player;
+  //private DebugSimpleExoPlayer player;
   private DefaultTrackSelector trackSelector;
   private TrackSelectionHelper trackSelectionHelper;
   private DebugTextViewHelper debugViewHelper;
@@ -265,6 +270,7 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
       lastSeenTrackGroupArray = null;
       player = ExoPlayerFactory.newSimpleInstance(this, trackSelector, new DefaultLoadControl(),
           drmSessionManager, extensionRendererMode);
+      //player = new DebugSimpleExoPlayer(this, trackSelector, new DefaultLoadControl(), drmSessionManager);
       player.addListener(this);
 
       eventLogger = new EventLogger(trackSelector);
@@ -345,16 +351,38 @@ public class PlayerActivity extends Activity implements OnClickListener, ExoPlay
     if (Util.SDK_INT < 18) {
       return null;
     }
-    HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(licenseUrl,
-        buildHttpDataSourceFactory(false));
-    if (keyRequestPropertiesArray != null) {
-      for (int i = 0; i < keyRequestPropertiesArray.length - 1; i += 2) {
-        drmCallback.setKeyRequestProperty(keyRequestPropertiesArray[i],
-            keyRequestPropertiesArray[i + 1]);
+
+    String deviceId = "e26ebf5c-624c-463b-b3bf-4d7dda899e53";
+    //String deviceId = "QLLwVgXZfyQ";
+
+    //AbemaDataSourceFactory dataSourceFactory =
+    //    new AbemaDataSourceFactory(this, "ua", BANDWIDTH_METER, deviceId);
+
+    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
+        "Mozilla/5.0 (Linux; Android 5.1.1; Nexus 6 Build/LYZ28E) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Mobile Safari/537.36");
+
+    AbemaDrmCallback drmCallback =
+        new AbemaDrmCallback(Uri.parse(licenseUrl), dataSourceFactory, null, deviceId);
+
+    //return new DefaultDrmSessionManager<>(uuid, FrameworkMediaDrm.newInstance(uuid), drmCallback,
+    //    null, mainHandler, eventLogger);
+    return new AbemaDrmSessionManager<>(drmCallback, null, mainHandler, new DefaultDrmSession.EventListener() {
+      @Override public void onDrmKeysLoaded() {
+        Log.d("WASABEEF", "onDrmKeysLoaded");
       }
-    }
-    return new DefaultDrmSessionManager<>(uuid,
-        FrameworkMediaDrm.newInstance(uuid), drmCallback, null, mainHandler, eventLogger);
+
+      @Override public void onDrmSessionManagerError(Exception e) {
+        Log.d("WASABEEF", "onDrmSessionManagerError");
+      }
+
+      @Override public void onDrmKeysRestored() {
+        Log.d("WASABEEF", "onDrmKeysRestored");
+      }
+
+      @Override public void onDrmKeysRemoved() {
+        Log.d("WASABEEF", "onDrmKeysRemoved");
+      }
+    });
   }
 
   private void releasePlayer() {

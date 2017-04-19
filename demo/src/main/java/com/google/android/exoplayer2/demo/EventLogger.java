@@ -391,8 +391,8 @@ import java.util.Locale;
         Log.d(TAG, prefix + String.format("%s", id3Frame.id));
       } else if (entry instanceof EventMessage) {
         EventMessage eventMessage = (EventMessage) entry;
-        Log.d(TAG, prefix + String.format("EMSG: scheme=%s, id=%d, value=%s",
-            eventMessage.schemeIdUri, eventMessage.id, eventMessage.value));
+        Log.d(TAG, prefix + String.format("EMSG: scheme=%s, id=%d, value=%s, message=%s",
+            eventMessage.schemeIdUri, eventMessage.id, eventMessage.value, new String(eventMessage.messageData)));
       }
     }
   }

@@ -17,6 +17,7 @@ package com.google.android.exoplayer2.drm;
 
 import android.annotation.TargetApi;
 import android.media.MediaDrm;
+import android.os.Looper;
 import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -31,7 +32,7 @@ public interface DrmSession<T extends ExoMediaCrypto> {
   /** Wraps the exception which is the cause of the error state. */
   class DrmSessionException extends Exception {
 
-    public DrmSessionException(Exception e) {
+    DrmSessionException(Exception e) {
       super(e);
     }
 
@@ -63,6 +64,10 @@ public interface DrmSession<T extends ExoMediaCrypto> {
    * The session is open and has the keys required for decryption.
    */
   int STATE_OPENED_WITH_KEYS = 4;
+
+  DrmSession<T> openSession(Looper playbackLooper, DrmInitData drmInitData);
+
+  void closeSession();
 
   /**
    * Returns the current state of the session.
